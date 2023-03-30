@@ -9,14 +9,9 @@ O objetivo é de um Clone estilizado do BackEnd do site OLX.
 
 ### Tecnologias utilizadas:
 
--Nodejs v18.15.0
-
--MOngoDB
-
--Express
-
--DotEnv
-
-
+_Nodejs v18.15.0
+_MOngoDB
+_Express
+_DotEnv
 
 _Estes códigos estão sobre a licença_ **MIT**
