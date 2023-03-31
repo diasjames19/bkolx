@@ -13,5 +13,6 @@ _Nodejs v18.15.0
 _MOngoDB
 _Express
 _DotEnv
+_Postman
 
 _Estes códigos estão sobre a licença_ **MIT**
