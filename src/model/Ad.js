@@ -4,15 +4,23 @@ mongoose.Promise = global.Promise;
 
 
 const modelSchema = new mongoose.Schema({
-    name:String,
-    email:String,
+    idUser:String,
     state:String,
-    passwordHash:String,
-    token:String
+    category:String,
+    images:[Object],
+    dateCreated:Date,
+    Title:String,
+    price:Number,
+    priceNegotiable:Boolean,
+    description:String,
+    views:Number,
+    status:String
+
+    
 
 });
 
-const modelName = 'User';
+const modelName = 'Ad';
 
 if(mongoose.connection && mongoose.connection.models[modelName]){
     module.exports = mongoose.connection.models[modelName]
