@@ -3,8 +3,8 @@ const express  = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const fileupload = require('express-fileupload');
+const apiRoutes = require('./src/router/routes')
 
-const router = express.Router();
 
 
 
@@ -22,19 +22,13 @@ mongoose.connection.on('error',(error)=>{
 
 const server = express();
 
-server.use(cors);
+server.use(cors());
 server.use(express.json());
 server.use(express.urlencoded({extended:true}));
 server.use(fileupload());
 server.use(express.static(__dirname +'/public'));
 
-server.get('/ping' ,(req,res)=>{
-
-
-    res.json({pong:true});
- 
-});
-
+server.use('/', apiRoutes);
 server.listen(process.env.PORT,()=>{
     console.log(`Rodando:${process.env.BASE}`);
 });

@@ -1,12 +1,11 @@
 {
   "name": "cloneolx",
   "version": "1.0.0",
-  "description": "",
+  "description": "Projeto criado durante o modulo de Node.js, em curso da soitech.",
   "main": "server.js",
   "scripts": {
-
     "start": "node server.js",
-    "startdev":"nodemon server.js"
+    "startdev": "nodemon -e ,json server.js"
   },
   "keywords": [],
   "author": "",
