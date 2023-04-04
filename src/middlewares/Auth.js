@@ -16,6 +16,14 @@ module.exports ={
             token = req.body.token; 
         }if(token === ''){
             res.json({invalidtoken:true})
+            return;
         }
+
+        const user = await User.findOne({token});
+        if((!user)){
+            res.json({invalidtoken:true});
+            return;
+        }
+        next();
     }
 }
