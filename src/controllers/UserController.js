@@ -1,4 +1,4 @@
-const State = require('../model/State')
+const State = require('../models/State');
 module.exports = {
 
     getStates: async(req, res)=>{

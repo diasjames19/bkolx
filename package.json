@@ -19,5 +19,8 @@
     "jimp": "^0.22.7",
     "mongoose": "^7.0.3",
     "uuid": "^9.0.0"
+  },
+  "dependencies": {
+    "express-validator": "^6.15.0"
   }
 }
