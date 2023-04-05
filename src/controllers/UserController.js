@@ -1,7 +1,7 @@
 const State = require('../models/State');
 const User = require('../models/User');
 const Category = require('../models/category');
-const Ad = require('../models/Ad')
+const Ad = require('../models/Ad');
 const {validationResult, matchedData} = require('express-validator');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
