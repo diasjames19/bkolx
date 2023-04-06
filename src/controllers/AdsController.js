@@ -101,11 +101,124 @@ module.exports = {
         res.json({id:info._id});
     },
     getList:async(req, res)=>{
+        // 
+        let {sort = 'asc',offset = 0, limit = 8, q, cat, state} = req.query;
+        let filters = {status:true};
+        let total = 0;
+
+        if(q){
+            filters.title = {'$regex':q, '$options':'i'};
+        }
+        if(cat){
+            const catSlug = await Category.findOne({slug:cat}).exec();
+            if(catSlug){
+                filters.category = catSlug._id.toString();
+            }  
+        }
+        if(state){
+            const stateName = await State.findOne({name: state.toUpperCase()}).exec();
+            if(stateName){
+                filters.state = stateName._id.toString();
+            }
+        }
+
+        const adsTotal =  await Ad.find(filters).exec();
+        total = adsTotal.length;
+        const adData = await Ad.find(filters)
+            .sort({dataCreated:(sort === 'desc' ? -1 : 1)})
+            .skip(parseInt(offset))
+            .limit(parseInt(limit))
+            .exec();
+
+            let adsList = [];
+
+            for(let index in adData){
+                    let image;
+                    let defaultImg = adData[index].images.find(e => e.default);
+                    if(defaultImg){
+                        image = `${process.env.BASE}/media/${defaultImg.urlNewName}`
+                    }else{
+                        image = `${process.env.BASE}/media/default.jpg`;
+                    }
+
+                    adsList.push({
+                        id:adData[index]._id,
+                        title:adData[index].title,
+                        price:adData[index].price,
+                        priceNegotiable:adData[index].price,
+                        image
+
+                    });
+            }
+
+            res.json({adsList, total});
 
     },
     getItem:async(req, res)=>{
 
-    },
+        let {id, other = null} = req.query;
+        if(!id){
+            res.json({error:'Sem Produto'});
+            return;
+        }
+        if(id.length < 24){
+            res.json({error:'ID Invalido'});
+            return;
+        }
+
+        const ad = await Ad.findById(id);
+        if(!ad){
+            res.json({error:'Produto Inexistente'});
+            return;
+        }
+        ad.views++;
+        await ad.save();
+        let images = [];
+        for(let posicao in ad.images){
+                images.push(`${process.env.BASE}/media/${ad.images[posicao].urlNewName}`);
+        }
+            let category  = await Category.findById(ad.category).exec();
+            let userInfo  = await User.findById(ad.idUser).exec();
+            let stateInfo  = await State.findById(ad.state).exec();
+            let others = [];
+            if(other){
+                const otherData = await Ad.find({status: true, idUser:ad.idUser}).exec();
+                for(let index in otherData){
+                    if(otherData[index]._id.toString() != ad._id.toString()){
+                        let image = `${process.env.BASE}/media/default.jpg`;
+                        let defaultImg = otherData[index].images.find(e=>e.default);
+                        if(defaultImg){
+                            image = `${process.env.BASE}/media/${defaultImg.urlNewName}`;
+                        }
+
+                        others.push({
+                            id:otherData[index]._id,
+                            title:otherData[index].title,
+                            price:otherData[index].prece,
+                            priceNegotiable:otherData[index].priceNegotiable,
+                            image
+                        });
+                    }
+
+                } 
+            }
+            res.json({
+                id:ad._id,
+                title:ad.title,
+                price:ad.prece,
+                priceNegotiable:ad.priceNegotiable,
+                dataCreated:ad.dataCreated,
+                views: ad.views,
+                images,
+                category,
+                userInfo:{
+                    name:userInfo.name,
+                    email:userInfo.email
+                },
+                stateName:stateInfo.name,
+                others
+            });
+        },
     editAction:async(req, res)=>{
 
     }
