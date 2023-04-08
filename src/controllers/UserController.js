@@ -25,7 +25,7 @@ module.exports = {
         let adList = [];
 
         for(let dados in ads){
-            const cat = await Category.findById(ads[i].category);
+            const cat = await Category.findById(ads[dados].category);
             adList.push({
                 id:ads[dados]._id,
                 status:ads[dados].status,
